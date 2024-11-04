@@ -1,7 +1,96 @@
 #include<iostream>
+#include <conio.h> 
+#include<string>
 using namespace std;
 
-int main(){
+bool val;
+int check(string a, string act[]){
+	int size = sizeof(act)/sizeof(act[0]);
+	for (int i = 0; i < 10;i++){
+		if(act[i] == a){
+			val == true;
+		}else{
+			cout << "Activity not found" << endl;
+		}
+	}	
+}
 
-  
+int ave(){
+	string name, chk;
+	double total, percent, result, average, dpercent, sum;
+	int hw[10]{};
+	string act[]{"Assignment", "Quiz"," Assessment Task", "Long Quiz", "Group Activity", "Individual Activity", "Attendance", "Recitation"};
+
+	cout << "Enter Title of Activity: ";
+	cin >> name;
+	check(name, act[]);
+	if (val==true){
+		chk = check(name);
+	cout << "Enter Number of " << chk <<  ": ";
+	cin >> total;
+	for(int i = 1; i <= total; i++){
+		cout << "Enter " << chk << " " << i << " grade: ";
+		cin >> hw[i]; 
+		cout << endl;
+	}
+	cout << "Enter Percentage of " << chk <<  ": ";
+	cin >> percent;
+	for(int i = 0; i <=total; i++){
+		sum += hw[i];
+	}
+	average = sum/total;
+	dpercent = percent/100;
+	result = average * dpercent;
+	return result;
+	}else{
+		cout << "Error, the activity you entered is not valid" << endl << "Try Again" << endl;
+		return ave();
+	}
+	
+	
+}
+
+int exam(){
+	double grade, result;
+	cout << "Enter Grade in Exam";
+	cin >> grade;
+	result = grade/.5;
+	return result;
+}
+
+int main(){
+	
+	int choice, cont, result[10], counter = 0, examGrade;
+	int i = 0;
+	
+	cout << "Grading Calculator" << endl << endl;
+	cout << "Enter 1 for Calculating grades" << endl << "Enter 2 to Calculate Exam Grade Needed For Specific Grade" << endl;
+	cin >> choice;
+	
+	system ("CLS");
+	switch(choice){
+		case 1:
+			
+			if(ave() == 0){
+				return 0;
+			}
+			do {
+				result[i] = ave();
+				cout << "Are there any more Activities? (-1 to end): ";
+				cin >> cont;
+				i++;
+				counter++;
+			} while(cont!=-1);
+			examGrade = exam();
+			break;
+		case 2:
+			cout << "kadhwa";
+			break;
+		default:
+			cout << "Error, Entered the wrong key character. Try Again";
+			return main();
+			break;	
+	
+	}
+  return 0;
 }

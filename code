@@ -4,37 +4,53 @@
 using namespace std;
 
 bool val;
-int check(string a, string act[]){
+string act[]{"Assignment", "Quiz"," Assessment Task", "Long Quiz", "Group Activity", "Individual Activity", "Attendance", "Recitation"};
+int clsstnd;
+
+
+bool check(string a){
 	int size = sizeof(act)/sizeof(act[0]);
-	for (int i = 0; i < 10;i++){
+	for (int i = 0; i < size;i++){
 		if(act[i] == a){
-			val == true;
-		}else{
-			cout << "Activity not found" << endl;
+			val = true;
+			return 0;
+			
 		}
-	}	
+	}
+	val = false;
 }
 
-int ave(){
+int clstnd(){
+	if(clsstnd>=100){
+		cout << "Class standing is already 100%" << endl;
+		return 0;
+	}
+		
 	string name, chk;
 	double total, percent, result, average, dpercent, sum;
 	int hw[10]{};
-	string act[]{"Assignment", "Quiz"," Assessment Task", "Long Quiz", "Group Activity", "Individual Activity", "Attendance", "Recitation"};
 
 	cout << "Enter Title of Activity: ";
 	cin >> name;
-	check(name, act[]);
+	check(name);
+
 	if (val==true){
-		chk = check(name);
-	cout << "Enter Number of " << chk <<  ": ";
+	cout << "Enter Number of " << name <<  ": ";
 	cin >> total;
 	for(int i = 1; i <= total; i++){
-		cout << "Enter " << chk << " " << i << " grade: ";
+		cout << "Enter " << name << " " << i << " grade: ";
 		cin >> hw[i]; 
 		cout << endl;
 	}
-	cout << "Enter Percentage of " << chk <<  ": ";
+	cout << "Enter Percentage of " << name <<  " in Class Standing: ";
 	cin >> percent;
+	clsstnd +=percent;
+	if(clsstnd > 100){
+		clsstnd -=percent;
+		cout << "Total of Class Standing is More Than 100%" << endl << "Try Again." << endl;
+		return clstnd();
+	}
+		
 	for(int i = 0; i <=total; i++){
 		sum += hw[i];
 	}
@@ -44,15 +60,13 @@ int ave(){
 	return result;
 	}else{
 		cout << "Error, the activity you entered is not valid" << endl << "Try Again" << endl;
-		return ave();
+		return clstnd();
 	}
-	
-	
 }
 
 int exam(){
 	double grade, result;
-	cout << "Enter Grade in Exam";
+	cout << "Enter Grade in Exam: ";
 	cin >> grade;
 	result = grade/.5;
 	return result;
@@ -60,7 +74,7 @@ int exam(){
 
 int main(){
 	
-	int choice, cont, result[10], counter = 0, examGrade;
+	int choice, cont, result[10], counter = 0, examGrade, temp;
 	int i = 0;
 	
 	cout << "Grading Calculator" << endl << endl;
@@ -70,16 +84,17 @@ int main(){
 	system ("CLS");
 	switch(choice){
 		case 1:
-			
-			if(ave() == 0){
-				return 0;
-			}
 			do {
-				result[i] = ave();
+				temp = clstnd();
+				if(temp==0){
+				break;
+				}else{
+				result[i] = temp;
 				cout << "Are there any more Activities? (-1 to end): ";
 				cin >> cont;
 				i++;
 				counter++;
+				}
 			} while(cont!=-1);
 			examGrade = exam();
 			break;

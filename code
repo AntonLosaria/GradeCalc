@@ -74,7 +74,7 @@ int exam(){
 
 int main(){
 	
-	int choice, cont, result[10], counter = 0, examGrade, temp;
+	int choice, cont, result[10], counter = 0, examGrade, temp, size, standing;
 	int i = 0;
 	
 	cout << "Grading Calculator" << endl << endl;
@@ -97,6 +97,9 @@ int main(){
 				}
 			} while(cont!=-1);
 			examGrade = exam();
+			for(int j=0; i < counter; j++){
+			 standing += result[j];	
+			}
 			break;
 		case 2:
 			cout << "kadhwa";

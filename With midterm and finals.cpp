@@ -188,8 +188,11 @@ int classStandForMidterm() {
     return result;
 }
 
+
+
 int classStandForFinals()
 {
+	cout << "You are now encoding your grade in finals" << endl;
 	if (clsstnd >= 100) {
         cout << "Class standing is already 100%" << endl;
         return clstnd();
@@ -316,6 +319,11 @@ int main() {
 				}
 			}
 			else if (prelimEncoded == true && midtermEncoded == true)
+			{
+				classStandForFinals();
+			}
+			
+			if (prelimEncoded == true && midtermEncoded == true)
 			{
 				classStandForFinals();
 			}

@@ -285,6 +285,11 @@ int main() {
 			{
 				classStandForMidterm();
 			}
+			
+			if (midtermEncoded == true)
+			{
+				return main();
+			}
 			break;
 			
 		case 3:

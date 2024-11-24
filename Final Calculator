@@ -109,7 +109,7 @@ double checkexam(string name){
 	cout << "Enter " << name << " Grade: ";
 	cin >> pastterm;
 	if(pastterm < 0 || pastterm > 100){
-		cout << name << " Grade cannot be more than 100 or 0. Try Again!";
+		cout << name << " Grade cannot be more than 100 or  less than 0. Try Again!";
 		return checkexam(name);
 	}
 	return pastterm;
@@ -200,7 +200,7 @@ int main(){
 					temp2 = checkexam(midfin) * gradediv; 
 					finalres = Ngrade(temp1, temp2);
 					if(finalres > 100){
-						cout << "Target grade is unattainable, Prelim Exam Grade Needed: " << finalres << endl;
+						cout << "Target grade is unattainable, Midterm Exam Grade Needed: " << finalres << endl;
 					}else{
 						cout << "Midterm Exam Grade Needed: " << finalres << endl;
 					}
@@ -211,7 +211,7 @@ int main(){
 					temp2 = checkexam(midfin) * gradediv; 
 					finalres = Ngrade(temp1, temp2);
 					if(finalres > 100){
-						cout << "Target grade is unattainable, Prelim Exam Grade Needed: " << finalres << endl;
+						cout << "Target grade is unattainable, Final Exam Grade Needed: " << finalres << endl;
 					}else{
 						cout << "Final Exam Grade Needed: " << finalres << endl;
 					}

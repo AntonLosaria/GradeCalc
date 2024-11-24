@@ -1,0 +1,367 @@
+#include <iostream>
+#include <conio.h>
+#include <string>
+#include <vector>
+#include <limits> 
+using namespace std;
+
+
+//int vals
+
+int PRELIM_CLSTND;
+int MIDTERM_CLSTND;
+int FINALS_CLSTND;
+
+
+int TERM;
+bool PRELIM_ENCODING;
+bool MIDTERM_ENCODING;
+bool FINALS_ENCODING;
+
+
+bool PRELIM_ENCODED = false; 
+bool MIDTERM_ENCODED = false;
+bool FINALS_ENCODED = false;
+
+
+bool INPUT_EXAM; // asks if the user want the exam to be inputed.
+bool EXAM_INPUTED; // if exam is inputed; true or false.
+
+
+
+struct Activity{
+	string title;
+	int grade;
+	int overAllScore;
+};
+
+struct GradeCategory{
+	string category;
+	int percentage;
+	vector<Activity> activity;
+};
+
+GradeCategory categories[]{
+	{"Quiz", 0},
+    {"Assignment", 0},
+    {"Assessment", 0},
+    {"Long Quiz", 0},
+    {"Group Activity", 0},
+    {"Individual Activity", 0},
+    {"Attendance", 0},
+    {"Recitation", 0},
+};
+
+//Functions:
+
+
+//enter percetage for each category
+void enterPercentagePerCategory() {
+    int totalPercentage = 0; 
+
+	do{
+	    for (int i = 0; i < 9; ++i) { 
+	        if (totalPercentage < 0 || totalPercentage > 100) {
+	            cout << "Invalid input. Percentage must be between 0 and 100." << endl;
+	            categories[i].percentage = 0;
+	            break;
+	    	}
+	    	
+			do{
+				bool validInput = false;
+            	while (!validInput) {
+            		
+
+					
+	                cout << "Enter the percentage for " << categories[i].category 
+	                     << " (remaining: " << 100 - totalPercentage << "%): " << endl;
+	                cin >> categories[i].percentage;
+
+	                //if input is not a number
+	                if (cin.fail()) {
+	                    cin.clear(); 
+	                    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+	                    cout << "Invalid input. Please enter a valid number." << endl;
+	                } 
+	                
+					else 
+					{
+						totalPercentage += categories[i].percentage;
+	                    validInput = true;
+	                }
+            	}
+
+			    if (totalPercentage > 100)
+				{
+					totalPercentage -= categories[i].percentage;
+					categories[i].percentage = 0;
+					cout << "Percentage is more than 100%"<<endl;	
+					cout << "The total percentage is returned to: "<< totalPercentage << "%"<< endl;
+
+				}
+				else{
+					break;
+				}
+			} while (totalPercentage <=100);
+			
+			if (totalPercentage >= 100) {
+	    	cout << "The total percentage has reached 100%. Remaining categories will be set to 0%." << endl;
+	    	break; }
+		} 
+		if (totalPercentage < 100 or totalPercentage > 100)
+		{
+			cout << "Total Percentage is less than or greater than 100%. Returning back to 0."<<endl;
+			totalPercentage = 0;
+			for (int i = 0; i < 9; ++i)
+			{
+				categories[i].percentage = 0;
+			}
+		}
+
+    } while (totalPercentage < 100);
+
+    cout << "All percentages have been entered successfully!" << endl;
+}
+
+void displayPercentage()
+{
+	for (int i = 0; i < 9; ++i) {
+        cout << categories[i].category << " equals to: " << categories[i].percentage << "%" << endl;
+    }
+}
+
+int enterTitleOfActivity(){
+	string a;//Activity Title
+	string b;//Category of the activity
+	int grade;
+	int score;
+	double OVERALL_SCORE;
+	bool categoryFound = false;
+	
+	
+	cout << "What is the title of your Activity? " << endl;
+	cin.ignore(); 
+	getline(cin, a);
+	
+	cout << "What category does this activity fall into? "<<endl;
+	getline(cin, b);
+	
+
+	
+	for (int i = 0; i < 9; i++)
+	{
+
+		if (b == categories[i].category)
+		{
+			categoryFound = true;
+			cout << "What is the grade of this activity?: ";
+			cin >>  grade;
+			cout << "What is the overall score of this activity?: ";
+			cin >> score;
+			
+			OVERALL_SCORE = (static_cast<double>(grade) / score) * categories[i].percentage;
+			
+			cout << categories[i].percentage <<endl;
+			
+			Activity newActivity = {a, grade, OVERALL_SCORE};
+			
+			categories[i].activity.push_back(newActivity);
+			
+			cout << "Activity " << a << "has been added to the category: " << b << endl;
+			cout << b << " classtanding is: " << OVERALL_SCORE << "%" <<endl;	
+		}	
+	}
+	if (!categoryFound) 
+	{
+	    cout << b <<  "is not included in the category. Please try again!" << endl;
+	    return enterTitleOfActivity(); 
+	}
+	
+	return OVERALL_SCORE;
+}
+
+void displayAllActivities() {
+    cout << "Displaying all activities in all categories:" << endl;
+
+    for (int i = 0; i < 9; ++i) { 
+        const GradeCategory& category = categories[i];
+
+ 
+        if (!category.activity.empty()) {
+            cout << "Category: " << category.category << endl;
+
+            for (int j = 0; j < category.activity.size(); ++j) { 
+                const Activity& act = category.activity[j];
+
+                cout << "  Activity Title: " << act.title << endl;
+                cout << "  Grade: " << act.grade << endl;
+                cout << "  Overall Score Contribution: " << act.overAllScore << "%" << endl;
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+int exam(){
+	int EXAM_GRADE;
+	int EXAM_OVERALL_SCORE;
+	double examGrade;
+	
+	cout << "Input your exam grade: ";
+	cin >> EXAM_GRADE;
+		
+	cout << "Input exam overall score: ";
+		
+	double examScore;
+	cin >> EXAM_OVERALL_SCORE;
+		
+	examGrade = EXAM_GRADE / EXAM_OVERALL_SCORE;
+		
+	return examGrade;
+
+}
+
+
+int CURRENT_CLSTND;
+int MAX_CLASS_STANDING = 100;
+
+int classStanding(int a)//a = what term you are currently encoding
+{
+	double ACT_SCORE;
+	if (CURRENT_CLSTND > MAX_CLASS_STANDING)
+	{
+		cout << "Current classtanding exceeds 100%" <<endl;
+		return classStanding(a);
+	}
+	
+	cout << "What term are you grading for? 1 : Prelim, 2: Midterm, 3: Finals" <<endl;
+	cin >> TERM;
+	
+	if (TERM == 1){
+		PRELIM_ENCODING = true;
+		cout << "Currently encoding Prelim." <<endl;
+	}
+	else if (TERM == 2){
+		MIDTERM_ENCODING = true;
+		cout << "Currently encoding Midterm." <<endl;
+	}
+	else if (TERM == 3){
+		FINALS_ENCODING = true;
+		cout << "Currently encoding Finals." <<endl;
+	}
+	else{
+		cout << "Pls enter the term!"<<endl;
+		cout << "Returning..." << endl;
+		return classStanding(a);
+	}
+	
+	enterPercentagePerCategory();
+	displayPercentage();
+	
+	int moreActsToGrade;//Asks the user if he wants more input
+	
+	if (CURRENT_CLSTND >= 0 or CURRENT_CLSTND < MAX_CLASS_STANDING) {
+	    do {
+            if (MIDTERM_ENCODING == true && PRELIM_ENCODED == false){
+            	cout << "Looks like you haven't entered Prelim grade yet. Pls Enter Prelim Grade:" <<endl;
+            	cin >> PRELIM_CLSTND;
+            	MIDTERM_ENCODED = true;
+            	PRELIM_ENCODED = true;
+			}
+			if (FINALS_ENCODING == true && MIDTERM_ENCODED == false){
+				cout << "Looks like you haven't entered Midterms grade yet. Pls Enter Midterms Grade:" <<endl;
+            	cin >> MIDTERM_CLSTND;
+            	MIDTERM_ENCODED = true;
+            	FINALS_ENCODED = true;
+			}
+			
+	        ACT_SCORE = enterTitleOfActivity();//CALL THE ENTER ACT FUNCTION
+	        
+		    if (CURRENT_CLSTND >= 100) 
+			{
+        	cout << "Class standing is already 100%" << endl;
+        	break;
+    		}
+	        cout << "Do you have more activities to grade? 1 if Yes, 0 if No: ";
+
+	        cin >> moreActsToGrade;
+	
+	        if (moreActsToGrade != 1 && moreActsToGrade != 0) {
+	            cout << "Invalid input. Please enter 1 for Yes or 0 for No." << endl;
+	        }
+	    } while (moreActsToGrade == 1);
+	
+	if (PRELIM_ENCODING = true){
+		PRELIM_ENCODED = true;
+	}
+	else if (MIDTERM_ENCODING = true){
+		MIDTERM_ENCODED = true;
+	}
+	else if (FINALS_ENCODING = true){
+		FINALS_ENCODED = true;
+	}
+	bool PRELIM_ENCODING = false; // these are set to false because input just ended
+	bool MIDTERM_ENCODING = false;
+	bool FINALS_ENCODING = false;
+	}
+	
+	
+	cout << "Do you want to input exam score? 1 if Yes, 2 if No" << endl;
+	cin >> INPUT_EXAM;
+	
+	double OVERALL_SCORE;
+	double EXAM_GRADE;
+	if (INPUT_EXAM == 1){
+		EXAM_GRADE = exam();
+	}
+	if (INPUT_EXAM == 2){
+		EXAM_GRADE = 0;
+	}
+
+	
+	cout << "Your exam score is: " << EXAM_GRADE<<endl;
+	
+	OVERALL_SCORE = (ACT_SCORE + EXAM_GRADE) / 100;
+	cout << "Your overall score is : " << OVERALL_SCORE <<endl;
+
+
+	displayAllActivities();
+}
+
+
+
+
+
+double classStandingGrade;
+
+
+
+
+int main() {
+    int choice;
+    int choice2;
+	int a;
+    cout << "Grading Calculator" << endl << endl;
+    cout << "Enter 1 for Standard Grading System" << endl;
+    
+    cin >> choice;
+
+    system("CLS");
+
+    switch (choice) 
+	{
+		case 1: 
+			classStanding(a);
+	
+		default:
+			return main();
+			break;
+	}
+	return 0;
+}
+	

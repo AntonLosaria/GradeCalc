@@ -21,13 +21,13 @@ bool check(string a){
 
 double clstnd(){
 	if(clsstnd>=100){
+		system ("CLS");
 		cout << "Class standing is already 100%" << endl;
 		return 0;
 	}
 		
 	string name, chk;
-	double total, percent, result, average, dpercent, sum;
-	int hw[10]{};
+	double total, percent, result, average, dpercent, sum, hw[10]{};
 	int size = sizeof(act)/sizeof(act[0]);
 
 	cout << "Enter Title of Activity: " << endl;
@@ -90,11 +90,11 @@ double print(){
 			counter++;
 			}
 	} while(cont!=-1);
-	system ("CLS");
 	
 	for(int j=0; j < counter; j++){
 	standing += result[j];	
 	}
+	
 	standing *= 0.5;
 	if(feat == true){
 		return standing;

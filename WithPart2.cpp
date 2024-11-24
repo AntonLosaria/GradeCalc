@@ -3,7 +3,7 @@
 using namespace std;
 
 bool val, feat;
-string act[]{"Assignment", "Quiz","Assessment_Task", "Long_Quiz", "Group_Activity", "Individual_Activity", "Attendance", "Recitation", "Laboratory"};
+string act[]{"Assignment", "Quiz","Assessment_Task", "Long Quiz", "Group_Activity", "Individual_Activity", "Attendance", "Recitation", "Laboratory"};
 int clsstnd;
 
 
@@ -26,8 +26,8 @@ double clstnd(){
 	}
 		
 	string name, chk;
-	double total, percent, result, average, dpercent, sum, hw[10]{}, gradescore;
-	int size = sizeof(act)/sizeof(act[0]), score, maxscore;
+	double total, percent, result, average, dpercent, sum, hw[10], gradescore, score, maxscore;
+	int size = sizeof(act)/sizeof(act[0]);
 
 	cout << "Enter Title of Activity: " << endl;
 	for (int i = 0; i < size; i++){
@@ -44,7 +44,8 @@ double clstnd(){
 		cin >> score;
 		cout << "Enter " << name << " " << i << " total items: ";
 		cin >> maxscore;
-		gradescore = (score/maxscore)*100;
+		gradescore = (score/maxscore)*100.0;
+		cout << gradescore;
 		hw[i] = gradescore;
 		cout << endl;
 	}
@@ -56,13 +57,13 @@ double clstnd(){
 		cout << "Total of Class Standing is More Than 100%" << endl << "Try Again." << endl;
 		return clstnd();
 	}
-		
 	for(int i = 1; i <=total; i++){
 		sum += hw[i];
 	}
 	average = sum/total;
 	dpercent = percent/100;
 	result = average * dpercent;
+	cout << result;
 	return result;
 	}else{
 		cout << "Error, the activity you entered is not valid" << endl << "Try Again" << endl;
@@ -71,13 +72,12 @@ double clstnd(){
 }
 
 double exam(){
-	double grade, result;
-	int score, maxscore;
+	double grade, result, score, maxscore;
 	cout << "Enter Score in Exam: ";
 	cin >> score;
 	cout << "Enter Total Items in Exam: ";
 	cin >> maxscore;
-	grade = (score/maxscore)*100;
+	grade = (score / maxscore) * 100;
 	result = grade * 0.5;
 	return result;
 }
@@ -91,17 +91,18 @@ double print(){
 			break;
 		}else{
 			result[i] = temp;
-			cout << "Are there any more Activities? (-1 to end): ";
+			cout << "Are there any more Activities? Any number to Continue (-1 to end): ";
 			cin >> cont;
 			if(cont == -1 && clsstnd != 100){
-				cout << "Class Standing is not yet 100%! Continuing Input of Class Standing.";
+				cout << "Class Standing is not yet 100%! Continuing Input of Class Standing." << endl;
 				cont = 0;
 			}
-			i++;
-			if(cont != -1)
+			if(cont != -1){
+				i++;
 				counter++;
+			}	
 			}
-	} while(cont!=-1);
+	}while(cont!=-1);
 	
 	for(int j=0; j < counter; j++){
 	standing += result[j];	

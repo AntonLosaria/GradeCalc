@@ -26,8 +26,8 @@ double clstnd(){
 	}
 		
 	string name, chk;
-	double total, percent, result, average, dpercent, sum, hw[10]{};
-	int size = sizeof(act)/sizeof(act[0]);
+	double total, percent, result, average, dpercent, sum, hw[10]{}, gradescore;
+	int size = sizeof(act)/sizeof(act[0]), score, maxscore;
 
 	cout << "Enter Title of Activity: " << endl;
 	for (int i = 0; i < size; i++){
@@ -40,8 +40,12 @@ double clstnd(){
 	cout << "Enter Number of " << name <<  ": ";
 	cin >> total;
 	for(int i = 1; i <= total; i++){
-		cout << "Enter " << name << " " << i << " grade: ";
-		cin >> hw[i];
+		cout << "Enter " << name << " " << i << " score: ";
+		cin >> score;
+		cout << "Enter " << name << " " << i << " total items: ";
+		cin >> maxscore;
+		gradescore = (score/maxscore)*100;
+		hw[i] = gradescore;
 		cout << endl;
 	}
 	cout << "Enter Percentage of " << name <<  " in Class Standing: ";
@@ -68,8 +72,12 @@ double clstnd(){
 
 double exam(){
 	double grade, result;
-	cout << "Enter Grade in Exam: ";
-	cin >> grade;
+	int score, maxscore;
+	cout << "Enter Score in Exam: ";
+	cin >> score;
+	cout << "Enter Total Items in Exam: ";
+	cin >> maxscore;
+	grade = (score/maxscore)*100;
 	result = grade * 0.5;
 	return result;
 }
@@ -85,8 +93,13 @@ double print(){
 			result[i] = temp;
 			cout << "Are there any more Activities? (-1 to end): ";
 			cin >> cont;
+			if(cont == -1 && clsstnd != 100){
+				cout << "Class Standing is not yet 100%! Continuing Input of Class Standing.";
+				cont = 0;
+			}
 			i++;
-			counter++;
+			if(cont != -1)
+				counter++;
 			}
 	} while(cont!=-1);
 	

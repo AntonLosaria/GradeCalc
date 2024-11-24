@@ -3,7 +3,7 @@
 using namespace std;
 
 bool val, feat;
-string act[]{"Assignment", "Quiz","Assessment Task", "Long Quiz", "Group Activity", "Individual Activity", "Attendance", "Recitation", "Laboratory"};
+string act[]{"Assignment", "Quiz","Assessment_Task", "Long_Quiz", "Group_Activity", "Individual_Activity", "Attendance", "Recitation", "Laboratory"};
 int clsstnd;
 
 

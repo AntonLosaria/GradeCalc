@@ -4,7 +4,7 @@
 using namespace std;
 
 bool val, feat;
-string act[]{"Assignment", "Quiz","Assessment Task", "Long Quiz", "Group Activity", "Individual Activity", "Attendance", "Recitation"};
+string act[]{"Assignment", "Quiz","Assessment Task", "Long Quiz", "Group Activity", "Individual Activity", "Attendance", "Recitation", "Laboratory"};
 int clsstnd;
 
 
@@ -137,7 +137,7 @@ double Ngrade(double standing, double temp2){
 
 int main(){
 	
-	int choice, choice2, choice3;
+	char choice, choice2, choice3;
 	double finalres, temp1, temp2;
 	double gradediv = 0.33	, gradeh = 0.67;
 	string midfin;
@@ -146,24 +146,25 @@ int main(){
 	cout << "Enter 1 for Calculating grades" << endl << "Enter 2 to Calculate Exam Grade Needed For Specific Grade" << endl;
 	cin >> choice;
 	
+	
 	system ("CLS");
 	switch(choice){
-		case 1:
+		case '1':
 			cout << "Enter 1 for Prelim, 2 for Midterm, and 3 for Finals: ";
 			cin >> choice2;
 			switch(choice2){
-				case 1:
+				case '1':
 					finalres = print();
 					cout << "Prelim Grade is " << finalres << endl;
 					break;
-				case 2:
+				case '2':
 					midfin = "Prelim";
 					temp1 = print();
 					temp2 = checkexam(midfin); 
 					finalres = (temp1 * gradeh) + (temp2 * gradediv);
 					cout << "Midterm Grade is " << finalres << endl;
 					break;
-				case 3:
+				case '3':
 					midfin = "Midterm";
 					temp1 = print();
 					temp2 = checkexam(midfin); 
@@ -175,33 +176,28 @@ int main(){
 					return main();
 					break;
 			}
-			cout << "Enter 1 if you'd like to use again, otherwise enter anything.";
-			cin >> choice3;
-			if(choice3 == 1){
-				system ("CLS");
-				
-				return main();
-			}
+			
+	
 			cout << "Thank you for using our Grading Calculator!";
 			break;
-		case 2:
+		case '2':
 			feat = true;
 			cout << "Enter 1 for Prelim, 2 for Midterm, and 3 for Finals: ";
 			cin >> choice2;
 			switch(choice2){
-				case 1:
+				case '1':
 					finalres = print();
 					finalres = Pgrade(finalres);
 					cout << "Prelim Exam Grade Needed: " << finalres << endl;
 					break;
-				case 2:
+				case '2':
 					midfin = "Prelim";
 					temp1 = print();
 					temp2 = checkexam(midfin) * gradediv; 
 					finalres = Ngrade(temp1, temp2);
 					cout << "Midterm Exam Grade Needed: " << finalres << endl;
 					break;
-				case 3:
+				case '3':
 					midfin = "Midterm";
 					temp1 = print();
 					temp2 = checkexam(midfin) * gradediv; 

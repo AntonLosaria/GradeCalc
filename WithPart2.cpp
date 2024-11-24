@@ -1,5 +1,4 @@
 #include<iostream>
-#include <conio.h> 
 #include<string>
 using namespace std;
 
@@ -109,7 +108,7 @@ double checkexam(string name){
 	cout << "Enter " << name << " Grade: ";
 	cin >> pastterm;
 	if(pastterm < 0 || pastterm > 100){
-		cout << name << " Grade cannot be more than 100 or 0. Try Again!";
+		cout << name << " Grade cannot be more than 100 or  less than 0. Try Again!";
 		return checkexam(name);
 	}
 	return pastterm;
@@ -188,21 +187,33 @@ int main(){
 				case '1':
 					finalres = print();
 					finalres = Pgrade(finalres);
-					cout << "Prelim Exam Grade Needed: " << finalres << endl;
+					if(finalres > 100){
+						cout << "Target grade is unattainable, Prelim Exam Grade Needed: " << finalres << endl;
+					}else{
+						cout << "Prelim Exam Grade Needed: " << finalres << endl;
+					}
 					break;
 				case '2':
 					midfin = "Prelim";
 					temp1 = print();
 					temp2 = checkexam(midfin) * gradediv; 
 					finalres = Ngrade(temp1, temp2);
-					cout << "Midterm Exam Grade Needed: " << finalres << endl;
+					if(finalres > 100){
+						cout << "Target grade is unattainable, Midterm Exam Grade Needed: " << finalres << endl;
+					}else{
+						cout << "Midterm Exam Grade Needed: " << finalres << endl;
+					}
 					break;
 				case '3':
 					midfin = "Midterm";
 					temp1 = print();
 					temp2 = checkexam(midfin) * gradediv; 
 					finalres = Ngrade(temp1, temp2);
-					cout << "Final Exam Grade Needed: " << finalres << endl;
+					if(finalres > 100){
+						cout << "Target grade is unattainable, Final Exam Grade Needed: " << finalres << endl;
+					}else{
+						cout << "Final Exam Grade Needed: " << finalres << endl;
+					}
 					break;
 				default:
 					cout << "Error, Entered the wrong key character. Try Again" << endl;
@@ -211,7 +222,7 @@ int main(){
 			}
 			break;
 		default:
-			cout << "Error, Entered the wrong key character. Try Again";
+			cout << "Error, Entered the wrong key character. Try Again" << endl;
 			return main();
 			break;	
 	

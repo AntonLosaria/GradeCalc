@@ -1,0 +1,717 @@
+#include <iostream>
+#include <conio.h>
+#include <string>
+#include <vector>
+#include <limits> 
+using namespace std;
+
+
+//int vals
+
+int PRELIM_CLSTND;
+int MIDTERM_CLSTND;
+int FINALS_CLSTND;
+
+
+int TERM;
+bool PRELIM_ENCODING;
+bool MIDTERM_ENCODING;
+bool FINALS_ENCODING;
+
+
+bool PRELIM_ENCODED = false; 
+bool MIDTERM_ENCODED = false;
+bool FINALS_ENCODED = false;
+
+
+bool INPUT_EXAM; // asks if the user want the exam to be inputed.
+bool EXAM_INPUTED; // if exam is inputed; true or false.
+
+
+
+struct Activity{
+	string title; 
+	int grade;
+	int overAllScore;
+};
+
+struct GradeCategory{
+	string category;
+	double percentage;
+	vector<Activity> activity; // this is an array
+};
+
+GradeCategory categories[]{
+	{"Quiz", 0},
+    {"Assignment", 0},
+    {"Assessment", 0},
+    {"Long Quiz", 0},
+    {"Group Activity", 0},
+    {"Individual Activity", 0},
+    {"Attendance", 0},
+    {"Recitation", 0},
+};
+
+//Functions:
+
+
+
+
+
+
+//enter percetage for each category
+void enterPercentagePerCategory() {
+    int totalPercentage = 0; 
+
+	do{
+	    for (int i = 0; i < 9; ++i) { 
+	        if (totalPercentage < 0 || totalPercentage > 100) {
+	            cout << "Invalid input. Percentage must be between 0 and 100." << endl;
+	            categories[i].percentage = 0;
+	            break;
+	    	}
+	    	
+			do{
+				bool validInput = false;
+            	while (!validInput) {
+            		
+
+					
+	                cout << "Enter the percentage for " << categories[i].category 
+	                     << " (remaining: " << 100 - totalPercentage << "%): " << endl;
+	                cin >> categories[i].percentage;
+
+	                //if input is not a number
+	                if (cin.fail()) {
+	                    cin.clear(); 
+	                    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+	                    cout << "Invalid input. Please enter a valid number." << endl;
+	                } 
+	                
+					else 
+					{
+						totalPercentage += categories[i].percentage;
+	                    validInput = true;
+	                }
+            	}
+
+			    if (totalPercentage > 100)
+				{
+					totalPercentage -= categories[i].percentage;
+					categories[i].percentage = 0;
+					cout << "Percentage is more than 100%"<<endl;	
+					cout << "The total percentage is returned to: "<< totalPercentage << "%"<< endl;
+
+				} 
+				else{
+					break;
+				}
+			} while (totalPercentage <=100);
+			
+			if (totalPercentage >= 100) {
+	    	cout << "The total percentage has reached 100%. Remaining categories will be set to 0%." << endl;
+	    	break; }
+		} 
+		if (totalPercentage < 100 or totalPercentage > 100)
+		{
+			cout << "Total Percentage is less than or greater than 100%. Returning back to 0."<<endl;
+			totalPercentage = 0;
+			for (int i = 0; i < 9; ++i)
+			{
+				categories[i].percentage = 0;
+			}
+		}
+
+    } while (totalPercentage < 100);
+
+    cout << "All percentages have been entered successfully!" << endl;
+}
+
+void displayPercentage(){
+	for (int i = 0; i < 9; ++i) {
+        cout << categories[i].category << " equals to: " << categories[i].percentage << "%" << endl;
+    }
+}
+
+
+
+int enterTitleOfActivity(){
+	string a;//Activity Title
+	string b;//Category of the activity
+	int score;
+	int grade;
+	double OVERALL_SCORE;
+	bool categoryFound = false;
+	
+	
+	cout << "What is the title of your Activity? " << endl;
+	cin.ignore(); 
+	getline(cin, a);
+	
+	cout << "What category does this activity fall into? "<<endl;
+	getline(cin, b);
+	
+
+	
+	for (int i = 0; i < 9; i++)
+	{
+
+		if (b == categories[i].category)
+		{
+			categoryFound = true;
+			bool GRADE_IS_PROPER = false;//if this is true, it means that the input score is higher than the overall score of an activity.
+			do{
+				cout << "What is the grade of this activity?: ";
+				cin >>  grade;
+			
+				cout << "What is the overall score of this activity?: ";
+				cin >> score;
+				
+				if (grade > score){
+					
+					cout << "Score is greater than the overall score! Pls Try again..." << endl;
+				}
+				else {
+					GRADE_IS_PROPER = true;
+				}
+				
+			} while (!GRADE_IS_PROPER);
+
+		
+			cout << grade << " " << score <<endl;
+					
+			OVERALL_SCORE = (static_cast<double>(grade) / score) * categories[i].percentage;//not finished
+			
+			
+			//cout << categories[i].percentage <<endl;
+			
+			
+			Activity newActivity = {a, grade, OVERALL_SCORE};
+			
+			categories[i].activity.push_back(newActivity);
+			
+			cout << "Activity " << a << "has been added to the category: " << b << endl;
+			cout << b << " classtanding is: " << OVERALL_SCORE << "%" <<endl;	
+		}	
+	}
+	
+	if (!categoryFound) 
+	{
+	    cout << b <<  "is not included in the category. Please try again!" << endl;
+	    return enterTitleOfActivity(); 
+	}
+	
+	return OVERALL_SCORE;
+}
+
+void displayAllActivities() {
+    cout << "Displaying all activities in all categories:" << endl;
+
+    for (int i = 0; i < 9; ++i) { 
+        const GradeCategory& category = categories[i];
+
+ 
+        if (!category.activity.empty()) {
+            cout << "Category: " << category.category << endl;
+
+            for (int j = 0; j < category.activity.size(); ++j) { 
+                const Activity& act = category.activity[j];
+
+                cout << "  Activity Title: " << act.title << endl;
+                cout << "  Grade: " << act.grade << endl;
+                cout << "  Overall Score Contribution: " << act.overAllScore << "%" << endl;
+            }
+        }
+    }
+}
+
+int calculateAllGrades(){
+	
+	int SUM_OF_GRADES;// this will be equal to sum of all input grades
+	int SUM_OF_OVERALLSCORE; // this will be equal to sum of all overall grades
+	double TotalGrade;
+	double OVERALL_SCORE_FOR_QUIZ;
+	
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < categories[i].activity.size(); j++) {
+        	
+            SUM_OF_GRADES += (static_cast<double>(categories[i].activity[j].grade) / categories[i].activity[j].overAllScore) * categories[i].percentage;
+        }
+    }
+	
+	TotalGrade = SUM_OF_GRADES;
+	return TotalGrade;
+}
+
+
+
+
+int exam(){
+	int EXAM_GRADE;
+	int EXAM_OVERALL_SCORE;
+	double examGrade;
+	
+	cout << "Input your exam grade: ";
+	cin >> EXAM_GRADE;
+		
+	cout << "Input exam overall score: ";
+		
+	double examScore;
+	cin >> EXAM_OVERALL_SCORE;
+		
+	examGrade = EXAM_GRADE / EXAM_OVERALL_SCORE;
+		
+	return examGrade;
+
+}
+
+
+int CURRENT_CLSTND;
+int MAX_CLASS_STANDING = 100;
+double classStandingGrade;
+int classStanding(int a)//a = what term you are currently encoding 
+{
+	double ACT_SCORE;
+	if (CURRENT_CLSTND > MAX_CLASS_STANDING)
+	{
+		cout << "Current classtanding exceeds 100%" <<endl;
+		return classStanding(a);
+	}
+	
+	cout << "What term are you grading for? 1 : Prelim, 2: Midterm, 3: Finals" <<endl;
+	cin >> TERM;
+	
+	if (TERM == 1){
+		PRELIM_ENCODING = true;
+		cout << "Currently encoding Prelim." <<endl;
+	}
+	else if (TERM == 2){
+		MIDTERM_ENCODING = true;
+		cout << "Currently encoding Midterm." <<endl;
+	}
+	else if (TERM == 3){
+		FINALS_ENCODING = true;
+		cout << "Currently encoding Finals." <<endl;
+	}
+	
+	else{
+		cout << "Pls enter the term!"<<endl;
+		cout << "Returning..." << endl;
+		return classStanding(a);
+	}
+	
+	enterPercentagePerCategory();
+	displayPercentage();
+	
+	int moreActsToGrade;//Asks the user if he wants to input more
+	
+	if (CURRENT_CLSTND >= 0 or CURRENT_CLSTND < MAX_CLASS_STANDING) {
+	    do {
+            if (MIDTERM_ENCODING == true && PRELIM_ENCODED == false) // this will run if currently encoding midterm
+			{
+            	cout << "Looks like you haven't entered Prelim grade yet. Pls Enter Prelim Grade:" <<endl;
+            	cin >> PRELIM_CLSTND;
+            	MIDTERM_ENCODED = true;
+            	PRELIM_ENCODED = true;
+			}
+			
+			if (FINALS_ENCODING == true && MIDTERM_ENCODED == false) // this will run if currently encoding finals
+			{
+				cout << "Looks like you haven't entered Midterms grade yet. Pls Enter Midterms Grade:" <<endl;
+            	cin >> MIDTERM_CLSTND;
+            	MIDTERM_ENCODED = true;
+            	FINALS_ENCODED = true;
+			}
+			
+	        enterTitleOfActivity();//CALL THE ENTER ACTivity FUNCTION, i put this inside a value so that i can reuse the function on the grading part
+	        
+		    if (CURRENT_CLSTND >= 100) 
+			{
+        	cout << "Class standing is already 100%" << endl;
+        	break;
+    		}
+    		
+	        cout << "Do you have more activities to grade? 1 if Yes, 0 if No: ";
+
+	        cin >> moreActsToGrade;
+	
+	        if (moreActsToGrade != 1 && moreActsToGrade != 0) {
+	            cout << "Invalid input. Please enter 1 for Yes or 0 for No." << endl;
+	        }
+	    } while (moreActsToGrade == 1);
+	
+	if (PRELIM_ENCODING = true){
+		PRELIM_ENCODED = true;
+	}
+	else if (MIDTERM_ENCODING = true){
+		MIDTERM_ENCODED = true;
+	}
+	else if (FINALS_ENCODING = true){
+		FINALS_ENCODED = true;
+	}
+	bool PRELIM_ENCODING = false; // these are set to false because input just ended
+	bool MIDTERM_ENCODING = false;
+	bool FINALS_ENCODING = false;
+	}
+	
+
+	cout << "Do you want to input exam score? 1 if Yes, 2 if No" << endl;
+	cin >> INPUT_EXAM;
+	
+	double OVERALL_SCORE;
+	double EXAM_GRADE;
+	if (INPUT_EXAM == 1){
+		EXAM_GRADE = exam();
+	}
+	else if (INPUT_EXAM == 2){
+		EXAM_GRADE = 0;
+	}
+
+	
+	cout << "Your exam score is: " << EXAM_GRADE <<endl;
+	
+	//OVERALL_SCORE = (ACT_SCORE + EXAM_GRADE) / 100;//not finished
+	cout << "Your overall score is : " << calculateAllGrades() <<endl;
+
+
+	displayAllActivities();
+}
+
+
+
+double inputNumber(double &value) {
+	bool validInput = false;
+    do{
+        cin >> value;
+
+        // Check for invalid input
+        if (cin.fail()) {
+            cout << "Invalid input. Please enter a valid number: ";
+            cin.clear(); // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+        } else {
+            validInput = true;
+        }
+    } while (!validInput);
+	return 0;
+}
+
+
+void findTargetGrade() {
+    bool ENCODING_PRELIM = false;
+    bool ENCODING_MIDTERM = false;
+    bool ENCODING_FINALS = false;
+
+   
+
+    double PRELIM_CLASS_STANDING; 
+    double MIDTERM_CLASS_STANDING; 
+    double FINALS_CLASS_STANDING; 
+    
+    //reusable values
+    double TARGET_GRADE;      
+    double CS_WEIGHT; // CS means classtanding    
+    double EXAM_WEIGHT;      
+    double EXAM_TOTAL_POINTS;     
+    double REQUIRED_EXAM_SCORE;  
+
+    int input1;
+    cout << "What target grade are you looking for? 1: Prelim, 2: Midterm, 3: Finals: ";
+    cin >> input1;
+
+    if (input1 == 1) {
+        ENCODING_PRELIM = true;
+        double GRADE;
+        cout << "Grading Prelim..." << endl;
+		
+		cout << "Enter the weight of class standing(%): ";
+		inputNumber(CS_WEIGHT);
+		
+        cout << "Enter the weight of the PRELIM exam(%): ";
+        inputNumber(EXAM_WEIGHT);	
+        
+        
+        CS_WEIGHT = CS_WEIGHT / 100;
+        EXAM_WEIGHT = EXAM_WEIGHT/ 100;
+        double TOTAL_WEIGHT = CS_WEIGHT + EXAM_WEIGHT;
+        
+		if (TOTAL_WEIGHT > 1.0) { 
+    		cout << "Error: The total weight exceeds 100%. Please re-enter the weights." << endl;
+    		return findTargetGrade(); 
+		}
+		else if (TOTAL_WEIGHT < 1.0){
+			cout << "Error: The total weight is less than 100%. Please re-enter the weights." << endl;
+    		return findTargetGrade(); 
+		}
+        system("CLS");
+		
+        cout << "Enter your target grade for Prelims (%): ";
+        inputNumber(TARGET_GRADE);
+        
+        cout << "Enter your current class standing: ";
+        inputNumber(GRADE);
+
+        cout << "Enter your overall exam score: ";
+        inputNumber(EXAM_TOTAL_POINTS);
+        
+        double WEIGHTED_CS = GRADE * CS_WEIGHT; //this is your current class standing for PRELIMS
+        double REMAINING_WEIGHT = TARGET_GRADE - WEIGHTED_CS; //just check if the inputted weights are equal to 100
+
+
+        if (REMAINING_WEIGHT <= 0) {
+            cout << "You already achieved your target grade with your current scores!" << endl;
+            cout << "It means your current Class standing is enough to pass your target grade" << endl;
+            return findTargetGrade();
+        }
+
+        REQUIRED_EXAM_SCORE = TARGET_GRADE - WEIGHTED_CS;
+
+        if (REQUIRED_EXAM_SCORE > EXAM_TOTAL_POINTS) {
+            cout << "It's impossible to reach your target grade with your current class standing!"<< endl;
+            cout << "Your required exam score is: " << REQUIRED_EXAM_SCORE << " which is higher than the exam total points:" << EXAM_TOTAL_POINTS << endl;
+			cout << "Which means your grades are not enough and even the exam cannot help you keep up with your target grade!" << endl;
+			cout << "Better luck next time :( " << endl;
+        } 
+		else {
+            cout << "You need a score of at least " << REQUIRED_EXAM_SCORE << " out of " << EXAM_TOTAL_POINTS << " on the midterm exam to reach your target grade." << endl;
+        }
+    } 
+	
+	
+	
+	else if (input1 == 2) {
+        ENCODING_MIDTERM = true;
+        double PRELIM_GRADE;      
+    	double PRELIM_WEIGHT;         
+        
+        cout << "Grading Midterm..." << endl;
+
+        cout << "Enter the weight of Prelim grade in Midterms(%): ";
+        inputNumber(PRELIM_WEIGHT);
+                
+		cout << "Enter the weight of Midterm class standing(%): ";
+		inputNumber(CS_WEIGHT);
+		
+        cout << "Enter the weight of the Midterm exam(%): ";
+        inputNumber(EXAM_WEIGHT);
+		
+		// this part just translates percentage into decimal
+		PRELIM_WEIGHT = PRELIM_WEIGHT /100;
+		CS_WEIGHT = CS_WEIGHT / 100;
+		EXAM_WEIGHT = EXAM_WEIGHT / 100;
+		double TOTAL_WEIGHT = PRELIM_WEIGHT + CS_WEIGHT + EXAM_WEIGHT; // note: THIS NOT THE FINAL GRADE, THIS JUST CHECKS IF all inputted weights are equal to 100 percent.
+		
+		if (TOTAL_WEIGHT > 1.0) { 
+    		cout << "Error: The total weight exceeds 100%. Please re-enter the weights." << endl;
+    		TARGET_GRADE = 0;
+    		PRELIM_WEIGHT = 0;
+    		CS_WEIGHT = 0;
+    		EXAM_WEIGHT = 0;
+    		return findTargetGrade(); 
+		}
+		else if (TOTAL_WEIGHT < 1.0){
+			cout << "Error: The total weight is less than 100%. Please re-enter the weights." << endl;
+			TARGET_GRADE = 0;
+    		PRELIM_WEIGHT = 0;
+    		CS_WEIGHT = 0;
+    		EXAM_WEIGHT = 0;
+    		return findTargetGrade(); 
+		}
+		
+    	system("CLS");
+		
+        cout << "Enter your target grade for midterms(%): ";
+        inputNumber(TARGET_GRADE);
+        
+        cout << "Enter your Prelim grade: ";
+        inputNumber(PRELIM_GRADE);
+
+        cout << "Enter your Midterm class standing score: ";
+        inputNumber(MIDTERM_CLASS_STANDING);
+
+        
+        cout << "Enter the total points possible for the Midterm exam: ";
+        inputNumber(EXAM_TOTAL_POINTS);
+
+
+        double WEIGHTED_CS = MIDTERM_CLASS_STANDING * CS_WEIGHT; //this is your current class standing for midterms
+        double WEIGHTED_PRELIM = PRELIM_GRADE * PRELIM_WEIGHT;
+        double REMAINING_WEIGHT = TARGET_GRADE - (WEIGHTED_CS + WEIGHTED_PRELIM);
+
+
+
+
+        if (REMAINING_WEIGHT <= 0) {
+            cout << "You already achieved your target grade with your current scores!" << endl;
+            cout << "It means your current Class standing is enough to pass your target grade" << endl;
+            //resets reusable values
+	    	TARGET_GRADE = 0;
+	    	PRELIM_WEIGHT = 0;
+	    	CS_WEIGHT = 0;
+	    	EXAM_WEIGHT = 0;
+            return findTargetGrade();
+        }
+
+        REQUIRED_EXAM_SCORE = (TARGET_GRADE - WEIGHTED_PRELIM) - WEIGHTED_CS;
+
+        if (REQUIRED_EXAM_SCORE > EXAM_TOTAL_POINTS) {
+            cout << "It's impossible to reach your target grade with your current class standing!"<< endl;
+            cout << "Your required exam score is: " << REQUIRED_EXAM_SCORE << " which is higher than the exam total points:" << EXAM_TOTAL_POINTS << endl;
+			cout << "Which means your grades are not enough and even the exam cannot help you keep up with your target grade!" << endl;
+			cout << "Better luck next time :( " << endl;
+	        //resets reusable values
+	    	TARGET_GRADE = 0;
+	    	PRELIM_WEIGHT = 0;
+	    	CS_WEIGHT = 0;
+	    	EXAM_WEIGHT = 0;
+        } 
+		else {
+            cout << "You need a score of at least " << REQUIRED_EXAM_SCORE << " out of " << EXAM_TOTAL_POINTS << " on the midterm exam to reach your target grade." << endl;
+        	//resets reusable values
+	    	TARGET_GRADE = 0;
+	    	PRELIM_WEIGHT = 0;
+	    	CS_WEIGHT = 0;
+	    	EXAM_WEIGHT = 0;
+        }
+        //resets reusable values
+    	TARGET_GRADE = 0;
+    	PRELIM_WEIGHT = 0;
+    	CS_WEIGHT = 0;
+    	EXAM_WEIGHT = 0;
+    } 
+	
+	else if (input1 == 3) {
+        ENCODING_FINALS = true;
+        double MIDTERM_GRADE;      
+    	double MIDTERM_WEIGHT;         
+        
+        cout << "Grading Finals..." << endl;
+
+        cout << "Enter the weight of Midterm grade in finals(%): ";
+        inputNumber(MIDTERM_WEIGHT);
+                
+		cout << "Enter the weight of finals class standing(%): ";
+		inputNumber(CS_WEIGHT);
+		
+        cout << "Enter the weight of the Finals exam(%): ";
+        inputNumber(EXAM_WEIGHT);
+		
+
+		MIDTERM_WEIGHT = MIDTERM_WEIGHT /100;
+		CS_WEIGHT = CS_WEIGHT / 100;
+		EXAM_WEIGHT = EXAM_WEIGHT / 100;
+		
+		double TOTAL_WEIGHT = MIDTERM_WEIGHT + CS_WEIGHT + EXAM_WEIGHT; // note: THIS NOT THE FINAL GRADE, THIS JUST CHECKS IF all inputted weights are equal to 100 percent.
+		
+		if (TOTAL_WEIGHT > 1.0) { 
+    		cout << "Error: The total weight exceeds 100%. Please re-enter the weights." << endl;
+    		TARGET_GRADE = 0;
+    		MIDTERM_WEIGHT = 0;
+    		CS_WEIGHT = 0;
+    		EXAM_WEIGHT = 0;
+    		return findTargetGrade(); 
+		}
+		else if (TOTAL_WEIGHT < 1.0){
+			cout << "Error: The total weight is less than 100%. Please re-enter the weights." << endl;
+			TARGET_GRADE = 0;
+    		MIDTERM_WEIGHT = 0;
+    		CS_WEIGHT = 0;
+    		EXAM_WEIGHT = 0;
+    		return findTargetGrade(); 
+		}
+		
+    	system("CLS");
+		
+		cout << "Enter your target grade for finals(%): ";
+        inputNumber(TARGET_GRADE);
+		
+        cout << "Enter your Midterm grade: ";
+        inputNumber(MIDTERM_GRADE);
+
+        cout << "Enter your finals class standing score: ";
+        inputNumber(FINALS_CLASS_STANDING);
+
+        
+        cout << "Enter the total points possible for the FINALS exam: ";
+        inputNumber(EXAM_TOTAL_POINTS);
+
+
+        double WEIGHTED_CS = FINALS_CLASS_STANDING * CS_WEIGHT; //this is your current class standing for finals
+        double WEIGHTED_MIDTERMS = MIDTERM_GRADE * MIDTERM_WEIGHT;
+        double REMAINING_WEIGHT = TARGET_GRADE - (WEIGHTED_CS + WEIGHTED_MIDTERMS);
+
+
+
+
+        if (REMAINING_WEIGHT <= 0) {
+            cout << "You already achieved your target grade with your current scores!" << endl;
+            cout << "Means your current Class standing is enough to pass your target grade" << endl;
+            TARGET_GRADE = 0;
+			MIDTERM_WEIGHT = 0;
+			CS_WEIGHT = 0;
+			EXAM_WEIGHT = 0;
+            return findTargetGrade();
+        }
+
+        REQUIRED_EXAM_SCORE = (TARGET_GRADE - WEIGHTED_MIDTERMS) - WEIGHTED_CS;
+
+        if (REQUIRED_EXAM_SCORE > EXAM_TOTAL_POINTS) {
+            cout << "It's impossible to reach your target grade with your current class standing!"<< endl;
+            cout << "Your required exam score is: " << REQUIRED_EXAM_SCORE << " which is higher than the exam total points:" << EXAM_TOTAL_POINTS << endl;
+			cout << "Which means your grades are not enough and even the exam cannot help you keep up with your target grade!" << endl;
+			cout << "Better luck next time :( " << endl;
+			TARGET_GRADE = 0;
+			MIDTERM_WEIGHT = 0;
+			CS_WEIGHT = 0;
+			EXAM_WEIGHT = 0;
+        } 
+		else {
+            cout << "You need a score of at least " << REQUIRED_EXAM_SCORE << " out of " << EXAM_TOTAL_POINTS << " on the midterm exam to reach your target grade." << endl;
+			TARGET_GRADE = 0;
+			MIDTERM_WEIGHT = 0;
+			CS_WEIGHT = 0;
+			EXAM_WEIGHT = 0;
+        }
+    }
+	TARGET_GRADE = 0;
+	CS_WEIGHT = 0;
+	EXAM_WEIGHT = 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+int main() {
+    int choice;
+    int choice2;
+	int a;
+    cout << "Grading Calculator" << endl << endl;
+    cout << "Enter 1 for Standard Grading System" << endl;
+    cout << "Enter 2 for Finding Target Grade" << endl;
+    cin >> choice;
+
+    system("CLS");
+
+    switch (choice) 
+	{
+		case 1: 
+			classStanding(a);
+			break;
+			
+		case 2:
+			findTargetGrade();
+			break;
+		default:
+			return main();
+			break;
+	}
+	return 0;
+}
+	

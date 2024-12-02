@@ -3,9 +3,9 @@
 #include <limits> 
 using namespace std;
 
-bool val, feat;
-string act[]{"Assignment", "Quiz","Assessment_Task", "Long Quiz", "Group_Activity", "Individual_Activity", "Attendance", "Recitation", "Laboratory"};
-int clsstnd;
+bool val, feat; //val, feat
+string act[]{"Assignment", "Quiz","Assessment_Task", "Long_Quiz", "Group_Activity", "Individual_Activity", "Attendance", "Recitation", "Laboratory"}; //act
+int clsstnd; //clstnd
 
 bool check(string a){
 	int size = sizeof(act)/sizeof(act[0]);
@@ -37,36 +37,45 @@ double inputNumber(double &value) {
 
 
 
-double clstnd(){
+double clstnd(){ //clstnd
 	if(clsstnd>=100){
 		system ("CLS");
 		cout << "Class standing is already 100%" << endl;
 		return 0;
 	}
 		
-	string name, chk;
-	double total, percent, result, average, dpercent, sum, hw[10], gradescore, score, maxscore;
+	bool Proper_Grade = false;	
+	string name, chk; //name, chk
+	double total, percent, result, average, dpercent, sum, hw[10], gradescore, score, maxscore; //total, percent, result, average, dpercent, sum, hw[10], gradescore, score, maxscore
 	int size = sizeof(act)/sizeof(act[0]);
 
-	cout << "Enter Title of Activity: " << endl;
 	for (int i = 0; i < size; i++){
 		cout << act[i] << endl;
 	}
-	cin >> name;
-	check(name);
+	cout << "Capital Letters and Underscore should the same as well." << endl << "Enter Title of Activity: ";
+	cin >> name; //name
+	check(name); // name
 	
 	if (val==true){
 	cout << "Enter Number of " << name <<  ": ";
-	inputNumber(total);
-	for(int i = 1; i <= total; i++){
+	inputNumber(total); //total
+	for(int i = 1; i <= total; i++){ // total
+		
+		do{
 		cout << "Enter " << name << " " << i << " score: ";
 		inputNumber(score);
 		cout << "Enter " << name << " " << i << " total items: ";
 		inputNumber(maxscore);
+		if(score > maxscore){
+			cout << "Score cannot be greater than Total Items. Try Again!" << endl;
+		}else{
+			Proper_Grade = true;
+		}
 		gradescore = (score/maxscore)*100.0;
 		cout << gradescore;
 		hw[i] = gradescore;
 		cout << endl;
+	} while(!Proper_Grade)
 	}
 	cout << "Enter Percentage of " << name <<  " in Class Standing: ";
 	inputNumber(percent);
@@ -91,18 +100,22 @@ double clstnd(){
 }
 
 double exam(){
+	bool Proper_Grade = false;
 	double grade, result, score, maxscore;
 	cout << "Enter Score in Exam: ";
 	inputNumber(score);
 	cout << "Enter Total Items in Exam: ";
 	inputNumber(maxscore);
+	if(score > maxscore){
+			cout << "Score cannot be greater than Total Items. Try Again!" << endl;
+			return exam;
+	}else{
+			Proper_Grade = true;
+		}
 	grade = (score / maxscore) * 100;
 	result = grade * 0.5;
 	return result;
 }
-
-
-
 
 double print(){
 	int temp, result[10], cont, i = 0, counter = 0;

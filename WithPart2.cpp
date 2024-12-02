@@ -117,7 +117,7 @@ double exam(){
 	return Overall_Exam;
 }
 
-double print(){
+double ClassStanding(){
 	int temp, All_ActivityGrade[10], Continue, i = 0, Activity_counter = 0; //temp, result[10], cont, i = 0, counter = 0;
 	double examGrade, Overall_ClassStanding;
 	do {
@@ -200,19 +200,19 @@ int main(){
 			cin >> choice2;
 			switch(choice2){
 				case '1':
-					FinalGrade = print();
+					FinalGrade = ClassStanding();
 					cout << "Prelim Grade is " << FinalGrade << endl;
 					break;
 				case '2':
 					Midterm_Final_PastTerm_Name = "Prelim";
-					TempHolder_ClassStanding_WithExam = print();
+					TempHolder_ClassStanding_WithExam = ClassStanding();
 					TempHolder_PastTermGrade = checkexam(Midterm_Final_PastTerm_Name); 
 					FinalGrade = (TempHolder_ClassStanding_WithExam * ClassStand_Exam_Weight) + (TempHolder_PastTermGrade * PastTermGrade_Weight);
 					cout << "Midterm Grade is " << FinalGrade << endl;
 					break;
 				case '3':
 					Midterm_Final_PastTerm_Name = "Midterm";
-					TempHolder_ClassStanding_WithExam = print();
+					TempHolder_ClassStanding_WithExam = ClassStanding();
 					TempHolder_PastTermGrade = checkexam(Midterm_Final_PastTerm_Name); 
 					FinalGrade = (TempHolder_ClassStanding_WithExam * ClassStand_Exam_Weight) + (TempHolder_PastTermGrade * PastTermGrade_Weight);
 					cout << "Final Grade is " << FinalGrade << endl;
@@ -232,7 +232,7 @@ int main(){
 			cin >> choice2;
 			switch(choice2){
 				case '1':
-					GradeForExam = print();
+					GradeForExam = ClassStanding();
 					GradeForExam = Prelim_ExamGrade(GradeForExam);
 					if(GradeForExam > 100){
 						cout << "Target grade is unattainable, Prelim Exam Grade Needed: " << GradeForExam << endl;
@@ -242,7 +242,7 @@ int main(){
 					break;
 				case '2':
 					Midterm_Final_PastTerm_Name = "Prelim";
-					TempHolder_ClassStanding = print();
+					TempHolder_ClassStanding = ClassStanding();
 					TempHolder_PastTermGrade = checkexam(Midterm_Final_PastTerm_Name) * PastTermGrade_Weight; 
 					GradeForExam = Mid_Fin_ExamGrade(TempHolder_ClassStanding, TempHolder_PastTermGrade);
 					if(GradeForExam > 100){
@@ -253,7 +253,7 @@ int main(){
 					break;
 				case '3':
 					Midterm_Final_PastTerm_Name = "Midterm";
-					TempHolder_ClassStanding = print();
+					TempHolder_ClassStanding = ClassStanding();
 					TempHolder_PastTermGrade = checkexam(Midterm_Final_PastTerm_Name) * PastTermGrade_Weight; 
 					GradeForExam = Mid_Fin_ExamGrade(TempHolder_ClassStanding, TempHolder_PastTermGrade);
 					if(GradeForExam > 100){

@@ -1,11 +1,11 @@
 #include<iostream>
 #include<string>
+#include <limits> 
 using namespace std;
 
 bool val, feat;
 string act[]{"Assignment", "Quiz","Assessment_Task", "Long Quiz", "Group_Activity", "Individual_Activity", "Attendance", "Recitation", "Laboratory"};
 int clsstnd;
-
 
 bool check(string a){
 	int size = sizeof(act)/sizeof(act[0]);
@@ -17,6 +17,25 @@ bool check(string a){
 	}
 	val = false;
 }
+
+double inputNumber(double &value) {
+	bool validInput = false;
+    do{
+        cin >> value;
+
+        // Check for invalid input
+        if (cin.fail()) {
+            cout << "Invalid input. Please enter a valid number: ";
+            cin.clear(); // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+        } else {
+            validInput = true;
+        }
+    } while (!validInput);
+	return 0;
+}
+
+
 
 double clstnd(){
 	if(clsstnd>=100){
@@ -35,22 +54,22 @@ double clstnd(){
 	}
 	cin >> name;
 	check(name);
-
+	
 	if (val==true){
 	cout << "Enter Number of " << name <<  ": ";
-	cin >> total;
+	inputNumber(total);
 	for(int i = 1; i <= total; i++){
 		cout << "Enter " << name << " " << i << " score: ";
-		cin >> score;
+		inputNumber(score);
 		cout << "Enter " << name << " " << i << " total items: ";
-		cin >> maxscore;
+		inputNumber(maxscore);
 		gradescore = (score/maxscore)*100.0;
 		cout << gradescore;
 		hw[i] = gradescore;
 		cout << endl;
 	}
 	cout << "Enter Percentage of " << name <<  " in Class Standing: ";
-	cin >> percent;
+	inputNumber(percent);
 	clsstnd +=percent;
 	if(clsstnd > 100){
 		clsstnd -=percent;
@@ -74,13 +93,16 @@ double clstnd(){
 double exam(){
 	double grade, result, score, maxscore;
 	cout << "Enter Score in Exam: ";
-	cin >> score;
+	inputNumber(score);
 	cout << "Enter Total Items in Exam: ";
-	cin >> maxscore;
+	inputNumber(maxscore);
 	grade = (score / maxscore) * 100;
 	result = grade * 0.5;
 	return result;
 }
+
+
+
 
 double print(){
 	int temp, result[10], cont, i = 0, counter = 0;
@@ -120,7 +142,7 @@ double print(){
 double checkexam(string name){
 	double pastterm;
 	cout << "Enter " << name << " Grade: ";
-	cin >> pastterm;
+	inputNumber(pastterm);
 	if(pastterm < 0 || pastterm > 100){
 		cout << name << " Grade cannot be more than 100 or  less than 0. Try Again!";
 		return checkexam(name);
@@ -131,7 +153,7 @@ double checkexam(string name){
 double Pgrade(double standing){
 	double target, result;
 	cout << "Enter your Target Grade: ";
-	cin >> target;
+	inputNumber(target);
 	cout << endl;
 	result = (target - standing)/0.5;
 	return result;
@@ -140,13 +162,11 @@ double Pgrade(double standing){
 double Ngrade(double standing, double temp2){
 	double target, result;
 	cout << "Enter your Target Grade: ";
-	cin >> target;
+	inputNumber(target);
 	cout << endl;
 	result = (((target - temp2)*1.5) - standing)/0.5;
 	return result;
 }
-
-
 
 int main(){
 	

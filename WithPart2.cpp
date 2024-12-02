@@ -72,7 +72,6 @@ double PerActivity_ClassStand(){ //clstnd
 			Proper_Grade = true;
 		}
 		Part_Activity_Grade = (score/maxscore)*100.0;
-		cout << Part_Activity_Grade;
 		Part_ActivityGrade[i] = Part_Activity_Grade; //gradescore
 		cout << endl;
 	} while(!Proper_Grade);

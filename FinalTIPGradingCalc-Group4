@@ -3,19 +3,48 @@
 #include <limits> 
 using namespace std;
 
-bool ActivityName, Feature; //val, feat
+bool Feature; //val, feat
 string act[]{"Assignment", "Quiz","Assessment_Task", "Long_Quiz", "Group_Activity", "Individual_Activity", "Attendance", "Recitation", "Laboratory"}; //act
 int ClassStanding_Total; //clsstnd
 
-bool Activity_NameChecker(string a){ 
-	int size = sizeof(act)/sizeof(act[0]);
-	for (int i = 0; i < size;i++){
-		if(act[i] == a){
-			ActivityName = true;
-			return 0;	
-		}
+
+string Activity_Name(char &a){ 
+	cin >> a;
+	
+	switch(a){
+	
+		case '1':
+			return "Quiz";
+			break;
+		case '2':
+			return "Assessment_Task";
+			break;
+		case '3':
+			return "Long_Quiz";
+			break;
+		case '4':
+			return "Group_Activity";
+			break;
+		case '5':
+			return "Individual_Activity";
+			break;
+		case '6':
+		return "Attendance";
+			break;	
+		case '7':
+			return "Recitation";
+			break;
+		case '8':
+			return "Laboratory";
+			break;
+		case '0':
+			return "Assignment";
+			break;
+		default:
+			cout << "Error, wrong number. Try again." << endl;
+			return Activity_Name(a);
 	}
-	ActivityName = false;
+	return 0;
 }
 
 double inputNumber(double &value) {
@@ -45,38 +74,36 @@ double PerActivity_ClassStand(){ //clstnd
 	}
 		
 	bool Proper_Grade = false;	
-	string Activity_Title, chk; //name, chk
+	char Activity_Title, chk; //name, chk
 	double Total_Activity, Activity_percent, Overall_Activity, Activity_Average, Activity_percent_decimal, Sum_Part_Activity_Grade, Part_ActivityGrade[10], Part_Activity_Grade, score, maxscore; //total, percent, result, average, dpercent, sum, hw[10], gradescore, score, maxscore
 	int size = sizeof(act)/sizeof(act[0]);
 
 	for (int i = 0; i < size; i++){
-		cout << act[i] << endl;
+		cout <<  i << ". "<< act[i] << endl;
 	}
-	cout << "Capital Letters and Underscore should the same as well." << endl << "Enter Title of Activity: ";
-	cin >> Activity_Title; //name
-	Activity_NameChecker(Activity_Title); // name
+	cout << "Enter No. for your Activity: "; 
+	string ActivityName = Activity_Name(Activity_Title); // name
 	
-	if (ActivityName==true){
-	cout << "Enter Number of " << Activity_Title <<  ": ";
+	cout << "Enter Number of " << ActivityName <<  ": ";
 	inputNumber(Total_Activity); //total
 	for(int i = 1; i <= Total_Activity; i++){ // total
 		
 		do{
-		cout << "Enter " << Activity_Title << " " << i << " score: ";
-		inputNumber(score);
-		cout << "Enter " << Activity_Title << " " << i << " total items: ";
-		inputNumber(maxscore);
-		if(score > maxscore){
-			cout << "Score cannot be greater than Total Items. Try Again!" << endl;
-		}else{
-			Proper_Grade = true;
-		}
-		Part_Activity_Grade = (score/maxscore)*100.0;
-		Part_ActivityGrade[i] = Part_Activity_Grade; //gradescore
-		cout << endl;
-	} while(!Proper_Grade);
+			cout << "Enter " << ActivityName << " " << i << " score: ";
+			inputNumber(score);
+			cout << "Enter " << ActivityName << " " << i << " total items: ";
+			inputNumber(maxscore);
+			if(score > maxscore){
+				cout << "Score cannot be greater than Total Items. Try Again!" << endl;
+			}else{
+				Proper_Grade = true;
+			}
+			Part_Activity_Grade = (score/maxscore)*100.0;
+			Part_ActivityGrade[i] = Part_Activity_Grade; //gradescore
+			cout << endl;
+			} while(!Proper_Grade);
 	}
-	cout << "Enter Percentage of " << Activity_Title <<  " in Class Standing: ";
+	cout << "Enter Percentage of " << ActivityName <<  " in Class Standing: ";
 	inputNumber(Activity_percent); //percent
 	ClassStanding_Total +=Activity_percent; //percent
 	if(ClassStanding_Total > 100){
@@ -92,10 +119,7 @@ double PerActivity_ClassStand(){ //clstnd
 	Overall_Activity = Activity_Average * Activity_percent_decimal;
 	cout << Overall_Activity;
 	return Overall_Activity;
-	}else{
-		cout << "Error, the activity you entered is not valid" << endl << "Try Again" << endl;
-		return PerActivity_ClassStand();
-	}
+			
 }
 
 double exam(){

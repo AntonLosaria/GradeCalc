@@ -99,7 +99,7 @@ double PerActivity_ClassStand(){
 	for(int i = 1; i <= Total_Activity; i++){ // loops all the total activity entered. Means if you input 2 (the total activities you want to grade), it will loop 2 times and run all codes inside it. 
 		
 		//this do while loop checks if all the Score is less than the overall score of an activity. Example: score = 5, but the maxscore = 3(or any number below 5). It promps the user again and again..
-		// until the score is less than maxscore.
+		// until the score is less than or equal to maxscore.
 		do{
 			cout << "Enter " << ActivityName << " " << i << " score: ";
 			inputNumber(score); //AGAIN: inputNumber() checks if the cin or input is a number.

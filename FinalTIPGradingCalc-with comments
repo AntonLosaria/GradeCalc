@@ -167,13 +167,16 @@ double ClassStanding(){
 	//for instance, if you graded 2 activities and inputted 40% each on their class standing. 40 + 40 = 80, and 80 is less than 100. 
 	//So again, if less than 100% it promps the user to enter more activities until the class standing is = 100
 	do {
-		temp = PerActivity_ClassStand();//temp means it get the output value of PerActivity_ClassStand() function and put it in the temp variable
+		temp = PerActivity_ClassStand();//temp means it get the output value of PerActivity_ClassStand() function and put it inside the temp variable
 		if(temp==0)//if temp does not recieves any value, it breaks the do while loop.
 		{
 			break;//if this breaks. Run the remaining logic below do/while loop.
 		}
 		else{
-			All_ActivityGrade[i] = temp; // this put the value of temp into a table(array)
+			// this put the value of temp into a table(array)
+			//for visualization: All_ActivityGrade[] = {temp[1],temp[2],temp[3]} --> this the visualization of the array
+			//or if: temp[1] = 10, temp[2] = 30, temp[3] = 25. Then All_ActivityGrade[] = {10,30,25} --> another example but basically same as the first one except each index has values
+			All_ActivityGrade[i] = temp; 
 			
 			cout << "Are there any more Activities? Any number to Continue (-1 to end): "; 
 			cin >> Continue;

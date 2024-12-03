@@ -140,8 +140,8 @@ double exam(){
 }
 
 double ClassStanding(){
-	int temp, All_ActivityGrade[10], i = 0, Activity_counter = 0;
-	char Continue; //temp, result[10], cont, i = 0, counter = 0;
+	int temp, All_ActivityGrade[10],Continue, i = 0, Activity_counter = 0;
+	char ; //temp, result[10], cont, i = 0, counter = 0;
 	double examGrade, Overall_ClassStanding;
 	do {
 		temp = PerActivity_ClassStand();
@@ -153,14 +153,14 @@ double ClassStanding(){
 			cin >> Continue;
 			if(Continue == -1 && ClassStanding_Total != 100){
 				cout << "Class Standing is not yet 100%! Continuing Input of Class Standing." << endl;
-				Continue = '0';
+				Continue = 0;
 			}
-			if(Continue != '-1'){
+			if(Continue != -1){
 				i++;
 				Activity_counter++; 
 			}	
 			}
-	}while(Continue!='-1');
+	}while(Continue!=-1);
 	
 	for(int j=0; j < Activity_counter; j++){
 	Overall_ClassStanding += All_ActivityGrade[j];	

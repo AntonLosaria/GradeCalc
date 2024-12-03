@@ -1,0 +1,333 @@
+#include<iostream>
+#include<string>
+#include <limits> 
+using namespace std;
+
+bool Feature; //val, feat
+string act[]{"Assignment", "Quiz","Assessment_Task", "Long_Quiz", "Group_Activity", "Individual_Activity", "Attendance", "Recitation", "Laboratory"}; //act
+int ClassStanding_Total; //clsstnd
+
+//this function is for checking if input is valid. Means the inputted activity title has the same string as in the act[] array
+string Activity_Name(char &a){ 
+	cin >> a;
+	
+	switch(a){
+		case '0':
+			return "Assignment"; // for example "Assignment". If "Assignment" is inside the act[] array then it will return true and remaining logic runs.
+			break;
+		case '1':
+			return "Quiz";
+			break;
+		case '2':
+			return "Assessment_Task";
+			break;
+		case '3':
+			return "Long_Quiz";
+			break;
+		case '4':
+			return "Group_Activity";
+			break;
+		case '5':
+			return "Individual_Activity";
+			break;
+		case '6':
+		return "Attendance";
+			break;	
+		case '7':
+			return "Recitation";
+			break;
+		case '8':
+			return "Laboratory";
+			break;
+		default:
+			cout << "Error, wrong number. Try again." << endl;//this will run if a is not equals to a number. Basically returns to the beginning of the function if the input is a letter or a symbol .
+			return Part_ActivityGrade;
+	}
+	return 0;
+}
+
+
+//this function is responsible for checking if input is a number. If not it will repeat until the user entered a number.
+double inputNumber(double &value) {
+	bool validInput = false;
+    do{
+        cin >> value;
+
+        // Check for invalid input
+        if (cin.fail()) {
+            cout << "Invalid input. Please enter a valid number: ";
+            cin.clear(); // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+        } else {
+            validInput = true;
+        }
+    } while (!validInput);
+	return 0;
+}
+
+
+//this function is responsible for inputting Activities
+double PerActivity_ClassStand(){ 
+	// this checks if class standing is less than 100. If less than 100 then all code below will run. If not less than 100 or greater than 100...
+	//it will return and run the function from the beginning.
+	if(ClassStanding_Total>=100) 
+	{
+		system ("CLS"); // this just clear all elements from the console
+		cout << "Class standing is already 100%" << endl;
+		return 0;
+	}
+		
+	bool Proper_Grade = false;	// this bool(bool = true or false values) will be used in a Do While statement. The use of it will be discussed below. 
+	char Activity_Title, chk; //name, chk
+	double Total_Activity, Activity_percent, Overall_Activity, Activity_Average, Activity_percent_decimal, Sum_Part_Activity_Grade, Part_ActivityGrade[10], Part_Activity_Grade, score, maxscore; 
+	int size = sizeof(act)/sizeof(act[0]); // this just get the total size of act[] array.
+
+	//this loop is for displaying all the elements in act[] array. Basically outputs something like...
+	// 1. Quiz
+	// 2. Assignment
+	// 3. Assessment
+	for (int i = 0; i < size; i++){
+		cout <<  i << ". "<< act[i] << endl;
+	}
+	
+	
+	cout << "Enter No. for your Activity: "; 
+	string ActivityName = Activity_Name(Activity_Title); // the value of Activity_Name() function will be encapsulated to the "ActivityName" variable. Which means whatever value Activity_Name() function returns, will be the value of "ActivityName"
+	
+	cout << "Enter Number of " << ActivityName <<  ": ";
+	inputNumber(Total_Activity); //inputNumber() checks if the cin or input is a number. If not a number, it repeats until the user enters a number. 
+	for(int i = 1; i <= Total_Activity; i++){ // loops all the total activity entered. Means if you input 2 (the total activities you want to grade), it will loop 2 times and run all codes inside it. 
+		
+		//this do while loop checks if all the Score is less than the overall score of an activity. Example: score = 5, but the maxscore = 3(or any number below 5). It promps the user again and again..
+		// until the score is less than maxscore.
+		do{
+			cout << "Enter " << ActivityName << " " << i << " score: ";
+			inputNumber(score); //AGAIN: inputNumber() checks if the cin or input is a number.
+			cout << "Enter " << ActivityName << " " << i << " total items: ";
+			inputNumber(maxscore);
+			if(score > maxscore){
+				cout << "Score cannot be greater than Total Items. Try Again!" << endl;
+			}else{
+				Proper_Grade = true; // if Proper_Grade is true then it exits the loop 
+			}
+			Part_Activity_Grade = (score/maxscore)*100.0;// put the output in a variable
+			Part_ActivityGrade[i] = Part_Activity_Grade; //This put each output in an array, particularly "Part_ActivityGrade[10]"
+			cout << endl;
+			} while(!Proper_Grade);//continues to run the loop until Proper_Grade is true, whilst it's false it continues the loop over and over again.
+	}
+	cout << "Enter Percentage of " << ActivityName <<  " in Class Standing" << "(Remaining " << 100-ClassStanding_Total << "%): ";
+	inputNumber(Activity_percent); 
+	ClassStanding_Total +=Activity_percent; //for each inputted "Activity_Percent", it will be added to "ClassStanding_Total"
+	
+	//this if statement runs if ClassStanding_Total is greater than 100. If not, the system just skips this if-statement
+	if(ClassStanding_Total > 100)
+	{
+		ClassStanding_Total -=Activity_percent; //if "ClassStanding_Total > 100" is true, it negates the inputted value so that, ClassStanding_Total does not exceed to 100 and returns to its former value
+		cout << "Total of Class Standing is More Than 100%" << endl << "Try Again." << endl;
+		return PerActivity_ClassStand();
+	}
+	//runs a loop and puts every value of each index of Part_ActivityGrade[] in a single variable.
+	//basically add every activity grade.
+	for(int i = 1; i <=Total_Activity; i++){
+		Sum_Part_Activity_Grade += Part_ActivityGrade[i];
+	}
+	Activity_Average = Sum_Part_Activity_Grade/Total_Activity; // gets the average
+	Activity_percent_decimal = Activity_percent/100; //converts to decimal
+	Overall_Activity = Activity_Average * Activity_percent_decimal;
+	cout << Overall_Activity;//just checks if the output value is working as intended. MEans the formula is right.
+	return Overall_Activity;
+			
+}
+
+double exam(){
+	bool Proper_Grade = false;
+	double Exam_grade, Overall_Exam, score, maxscore;
+	cout << "Enter Score in Exam: ";
+	inputNumber(score);
+	cout << "Enter Total Items in Exam: ";
+	inputNumber(maxscore);
+	if(score > maxscore){
+			cout << "Score cannot be greater than Total Items. Try Again!" << endl;
+			return exam();
+	}else{
+			Proper_Grade = true; 
+		}
+	Exam_grade = (score / maxscore) * 100;
+	Overall_Exam = Exam_grade * 0.5;
+	return Overall_Exam;
+}
+
+double ClassStanding(){
+	int temp, All_ActivityGrade[10],Continue, i = 0, Activity_counter = 0;
+	double examGrade, Overall_ClassStanding;
+	
+	//this loop runs to check if either Class standing is less than 100% or the user wants to grade more activities.
+	//Note: Class Standing should always be equal to 100% because if not, it means the entered activities is insufficient...
+	//indicating the inputted percentage per activity does not reach the quota(which is 100).
+	//for instance, if you graded 2 activities and inputted 40% each on their class standing. 40 + 40 = 80, and 80 is less than 100. 
+	//So again, if less than 100% it promps the user to enter more activities until the class standing is = 100
+	do {
+		temp = PerActivity_ClassStand();//temp means it get the output value of PerActivity_ClassStand() function and put it in the temp variable
+		if(temp==0)//if temp does not recieves any value, it breaks the do while loop.
+		{
+			break;//if this breaks. Run the remaining logic below do/while loop.
+		}
+		else{
+			All_ActivityGrade[i] = temp; // this put the value of temp into a table(array)
+			
+			cout << "Are there any more Activities? Any number to Continue (-1 to end): "; 
+			cin >> Continue;
+			if(Continue == -1 && ClassStanding_Total != 100){
+				cout << "Class Standing is not yet 100%! Continuing Input of Class Standing." << endl;
+				Continue = 0;
+			}
+			//while the user want to input more activities, we move to the next index of "All_ActivityGrade[i]", because of "i++"
+			if(Continue != -1){
+				i++;
+				Activity_counter++; 
+			}	
+			}
+	}while(Continue!=-1);//again while this statement is true. Loops the logic inside it.
+	
+	//this loop is for putting every index of All_ActivityGrade[] array into a single variable.
+	// for visualization: if All_ActivityGrade[] = {10,30,40,15,35}
+	//it adds them to the Overall_ClassStanding. 10 + 30 + 40 + 15 + 35 = 120 --> this will be the value of "Overall_ClassStanding" or basically "Overall_ClassStanding = 120;"
+	for(int j=0; j < Activity_counter; j++){
+	Overall_ClassStanding += All_ActivityGrade[j];	
+	}
+	
+	Overall_ClassStanding *= 0.5; //multiply whatever Overall_ClassStanding holds to 0.5 which is the default weighing system of TIP (50% for the class standing and 50% for exam)
+	
+	if(Feature == true)//this just ends the function and return Overall_ClassStanding. And all logic below this statement will be terminated.
+	{
+		return Overall_ClassStanding;
+	}
+	examGrade = exam();//if feature is false, it prompts the user the exam function and add the out put to the class standing
+	Overall_ClassStanding += examGrade;
+	return Overall_ClassStanding;
+}
+
+double checkexam(string name){
+	double PastTerm_Grade;
+	cout << "Enter " << name << " Grade: ";
+	inputNumber(PastTerm_Grade);
+	if(PastTerm_Grade < 0 || PastTerm_Grade > 100){
+		cout << name << " Grade cannot be more than 100 or  less than 0. Try Again!";
+		return checkexam(name);
+	}
+	return PastTerm_Grade;
+}
+
+double Prelim_ExamGrade(double Standing){
+	double target, PrelimExamGrade;
+	cout << "Enter your Target Grade: ";
+	inputNumber(target);
+	cout << endl;
+	PrelimExamGrade = (target - Standing)/0.5;
+	return PrelimExamGrade;
+}
+
+double Mid_Fin_ExamGrade(double Standing, double PastTermGrade){
+	double target, MidFinExamGrade;
+	cout << "Enter your Target Grade: ";
+	inputNumber(target);
+	cout << endl;
+	MidFinExamGrade = (((target - PastTermGrade)*1.5) - Standing)/0.5;
+	return MidFinExamGrade;
+}
+
+int main(){
+	
+	char choice, choice2, choice3;
+	double FinalGrade, TempHolder_ClassStanding, TempHolder_PastTermGrade, GradeForExam, TempHolder_ClassStanding_WithExam;
+	double PastTermGrade_Weight = 0.33	, ClassStand_Exam_Weight = 0.67;
+	string Midterm_Final_PastTerm_Name;
+	
+	cout << "Grading Calculator" << endl << endl;
+	cout << "Enter 1 for Calculating grades" << endl << "Enter 2 to Calculate Exam Grade Needed For Specific Grade" << endl;
+	cin >> choice;
+	
+	
+	system ("CLS");
+	switch(choice){
+		case '1':
+			cout << "Enter 1 for Prelim, 2 for Midterm, and 3 for Finals: ";
+			cin >> choice2;
+			switch(choice2){
+				case '1':
+					FinalGrade = ClassStanding();
+					cout << "Prelim Grade is " << FinalGrade << endl;
+					break;
+				case '2':
+					Midterm_Final_PastTerm_Name = "Prelim";
+					TempHolder_ClassStanding_WithExam = ClassStanding();
+					TempHolder_PastTermGrade = checkexam(Midterm_Final_PastTerm_Name); 
+					FinalGrade = (TempHolder_ClassStanding_WithExam * ClassStand_Exam_Weight) + (TempHolder_PastTermGrade * PastTermGrade_Weight);
+					cout << "Midterm Grade is " << FinalGrade << endl;
+					break;
+				case '3':
+					Midterm_Final_PastTerm_Name = "Midterm";
+					TempHolder_ClassStanding_WithExam = ClassStanding();
+					TempHolder_PastTermGrade = checkexam(Midterm_Final_PastTerm_Name); 
+					FinalGrade = (TempHolder_ClassStanding_WithExam * ClassStand_Exam_Weight) + (TempHolder_PastTermGrade * PastTermGrade_Weight);
+					cout << "Final Grade is " << FinalGrade << endl;
+					break;
+				default:
+					cout << "Error, Entered the wrong key character. Try Again" << endl;
+					return main();
+					break;
+			}
+			
+	
+			cout << "Thank you for using our Grading Calculator!";
+			break;
+		case '2':
+			Feature = true;
+			cout << "Enter 1 for Prelim, 2 for Midterm, and 3 for Finals: ";
+			cin >> choice2;
+			switch(choice2){
+				case '1':
+					GradeForExam = ClassStanding();
+					GradeForExam = Prelim_ExamGrade(GradeForExam);
+					if(GradeForExam > 100){
+						cout << "Target grade is unattainable, Prelim Exam Grade Needed: " << GradeForExam << endl;
+					}else{
+						cout << "Prelim Exam Grade Needed: " << GradeForExam << endl;
+					}
+					break;
+				case '2':
+					Midterm_Final_PastTerm_Name = "Prelim";
+					TempHolder_ClassStanding = ClassStanding();
+					TempHolder_PastTermGrade = checkexam(Midterm_Final_PastTerm_Name) * PastTermGrade_Weight; 
+					GradeForExam = Mid_Fin_ExamGrade(TempHolder_ClassStanding, TempHolder_PastTermGrade);
+					if(GradeForExam > 100){
+						cout << "Target grade is unattainable, Midterm Exam Grade Needed: " << GradeForExam << endl;
+					}else{
+						cout << "Midterm Exam Grade Needed: " << GradeForExam << endl;
+					}
+					break;
+				case '3':
+					Midterm_Final_PastTerm_Name = "Midterm";
+					TempHolder_ClassStanding = ClassStanding();
+					TempHolder_PastTermGrade = checkexam(Midterm_Final_PastTerm_Name) * PastTermGrade_Weight; 
+					GradeForExam = Mid_Fin_ExamGrade(TempHolder_ClassStanding, TempHolder_PastTermGrade);
+					if(GradeForExam > 100){
+						cout << "Target grade is unattainable, Final Exam Grade Needed: " << GradeForExam << endl;
+					}else{
+						cout << "Final Exam Grade Needed: " << GradeForExam << endl;
+					}
+					break;
+				default:
+					cout << "Error, Entered the wrong key character. Try Again" << endl;
+					return main();
+					break;
+			}
+			break;
+		default:
+			cout << "Error, Entered the wrong key character. Try Again" << endl;
+			return main();
+			break;	
+	
+  	return 0;
+	}
+}

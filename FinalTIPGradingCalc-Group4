@@ -141,7 +141,6 @@ double exam(){
 
 double ClassStanding(){
 	int temp, All_ActivityGrade[10],Continue, i = 0, Activity_counter = 0;
-	char ; //temp, result[10], cont, i = 0, counter = 0;
 	double examGrade, Overall_ClassStanding;
 	do {
 		temp = PerActivity_ClassStand();

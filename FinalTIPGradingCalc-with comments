@@ -211,7 +211,6 @@ double ClassStanding(){
 }
 
 double checkexam(string name){
-	double PastTerm_Grade;
 	cout << "Enter " << name << " Grade: ";
 	inputNumber(PastTerm_Grade);
 	if(PastTerm_Grade < 0 || PastTerm_Grade > 100){
